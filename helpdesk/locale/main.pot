@@ -16,6 +16,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.12.1\n"
 
+#. Workspace Header Text
+#: helpdesk/workspace/helpdesk/helpdesk.json
+msgid ""
+"<span class=\"h3\" style=\"\"><a href=\"/helpdesk\">Visit "
+"Helpdesk</a></span>"
+msgstr ""
+
 #. DocType: HD Support Search Source:1
 msgid "API"
 msgstr ""
