@@ -2,8 +2,23 @@ import re
 
 import frappe
 from bs4 import BeautifulSoup
+from frappe.model.document import Document
 from frappe.realtime import get_website_room
+from frappe.utils.safe_exec import get_safe_globals
 from frappe.utils.telemetry import capture as _capture
+from pypika import Criterion
+
+
+def check_permissions(doctype, parent):
+	user = frappe.session.user
+	permissions = ("select", "read")
+	has_select_permission, has_read_permission = [
+		frappe.has_permission(doctype, perm, user=user, parent_doctype=parent)
+		for perm in permissions
+	]
+
+	if not has_select_permission and not has_read_permission:
+		frappe.throw(f"Insufficient Permission for {doctype}", frappe.PermissionError)
 
 
 def is_agent(user: str = None) -> bool:
@@ -24,6 +39,32 @@ def publish_event(event: str, data: dict):
 
 def capture_event(event: str):
 	return _capture(event, "helpdesk")
+
+
+def get_customer(contact: str) -> str | None:
+	"""
+	Get `Customer` from `Contact`
+
+	:param contact: Contact which belongs to a customer
+	:return: Customer `name` if available
+	"""
+	QBDynamicLink = frappe.qb.DocType("Dynamic Link")
+	QBContact = frappe.qb.DocType("Contact")
+	conditions = [QBDynamicLink.parent == contact, QBContact.email_id == contact]
+	res = (
+		frappe.qb.from_(QBDynamicLink)
+		.select(QBDynamicLink.link_name)
+		.where(QBDynamicLink.parentfield == "links")
+		.where(QBDynamicLink.parenttype == "Contact")
+		.join(QBContact)
+		.on(QBDynamicLink.parent == QBContact.name)
+		.where(Criterion.any(conditions))
+		.limit(1)
+		.run(as_dict=True)
+	)
+	if not len(res):
+		return
+	return res.pop().link_name
 
 
 def extract_mentions(html):
@@ -50,3 +91,17 @@ def alphanumeric_to_int(s: str) -> int | None:
 		return
 
 	return int(s.group(0))
+
+
+def get_context(d: Document) -> dict:
+	"""
+	Get safe context for `safe_eval`
+
+	:param doc: `Document` to add in context
+	:return: Context with `doc` and safe variables
+	"""
+	utils = get_safe_globals().get("frappe").get("utils")
+	return {
+		"doc": d.as_dict(),
+		"frappe": frappe._dict(utils=utils),
+	}

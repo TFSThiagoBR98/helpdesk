@@ -1,17 +1,38 @@
 <template>
   <div
-    class="flex select-none flex-col border-r border-gray-200 bg-gray-50 px-3 py-2 text-base transition-all duration-300 ease-in-out"
-    :class="{
-      'w-56': sidebarStore.isExpanded,
-      'w-13': !sidebarStore.isExpanded,
-    }"
+    class="flex select-none flex-col border-r border-gray-200 bg-gray-50 p-2 text-base -all duration-300 ease-in-out"
+    :style="isExpanded ? widthExpanded : widthMinimised"
   >
-    <UserMenu class="pb-2" :options="profileSettings" />
-    <LinkGroup :options="menuOptions" />
+    <UserMenu class="mb-2 ml-0.5" :options="profileSettings" />
+    <div class="flex flex-col gap-1">
+      <SidebarLink
+        v-for="option in menuOptions"
+        v-bind="option"
+        :key="option.label"
+        :is-expanded="isExpanded"
+        :is-active="option.to?.includes(route.name.toString())"
+      />
+    </div>
     <span v-if="showExtra">
       <hr class="my-2" />
-      <LinkGroup :options="extraOptions" />
+      <div class="flex flex-col gap-1">
+        <SidebarLink
+          v-for="option in extraOptions"
+          v-bind="option"
+          :key="option.label"
+          :is-expanded="isExpanded"
+          :is-active="option.to?.includes(route.name?.toString())"
+        />
+      </div>
     </span>
+    <div class="grow" />
+    <SidebarLink
+      :icon="isExpanded ? 'lucide:chevrons-left' : 'lucide:chevrons-right'"
+      :is-active="false"
+      :is-expanded="isExpanded"
+      :label="isExpanded ? 'Collapse' : 'Expand'"
+      :on-click="() => (isExpanded = !isExpanded)"
+    />
   </div>
 </template>
 
@@ -36,52 +57,48 @@ import {
   CUSTOMER_PORTAL_LANDING,
 } from "@/router";
 import UserMenu from "./UserMenu.vue";
-import LinkGroup from "./LinkGroup.vue";
-import IconAgent from "~icons/lucide/user";
-import IconAt from "~icons/lucide/at-sign";
-import IconCannedResponse from "~icons/lucide/cloud-lightning";
-import IconContact from "~icons/lucide/contact-2";
-import IconCustomer from "~icons/lucide/user-circle-2";
-import IconDashboard from "~icons/lucide/layout-grid";
-import IconEscalation from "~icons/lucide/arrow-up-from-line";
-import IconKnowledgeBase from "~icons/lucide/book-open";
-import IconMore from "~icons/lucide/more-horizontal";
-import IconSLA from "~icons/lucide/scroll-text";
-import IconTeam from "~icons/lucide/users";
-import IconTicket from "~icons/lucide/ticket";
-import IconTicketType from "~icons/lucide/folder-open";
+import SidebarLink from "@/components/SidebarLink.vue";
+import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const keymapStore = useKeymapStore();
-const sidebarStore = useSidebarStore();
+const { isExpanded } = storeToRefs(useSidebarStore());
 
+const widthExpanded = {
+  "min-width": "256px",
+  "max-width": "256px",
+};
+const widthMinimised = {
+  "min-width": "50px",
+  "max-width": "50px",
+};
 const menuOptions = computed(() => [
   {
     label: "Tickets",
-    icon: IconTicket,
+    icon: "lucide:ticket",
     to: AGENT_PORTAL_TICKET_LIST,
   },
   {
     label: "Dashboard",
-    icon: IconDashboard,
+    icon: "lucide:layout-grid",
     to: AGENT_PORTAL_DASHBOARD,
   },
   {
     label: "Agents",
-    icon: IconAgent,
+    icon: "lucide:user",
     to: AGENT_PORTAL_AGENT_LIST,
   },
   {
     label: "Knowledge base",
-    icon: IconKnowledgeBase,
+    icon: "lucide:book-open",
     to: "DeskKBHome",
     isBeta: true,
   },
   {
     label: showExtra.value ? "Less" : "More",
-    icon: IconMore,
+    icon: "lucide:more-horizontal",
     onClick: () => (showExtra.value = !showExtra.value),
   },
 ]);
@@ -89,44 +106,44 @@ const menuOptions = computed(() => [
 const extraOptions = [
   {
     label: "Support policies",
-    icon: IconSLA,
+    icon: "lucide:scroll-text",
     to: AGENT_PORTAL_SLA_LIST,
   },
   {
     label: "Teams",
-    icon: IconTeam,
+    icon: "lucide:users",
     to: AGENT_PORTAL_TEAM_LIST,
   },
   {
     label: "Escalation rules",
-    icon: IconEscalation,
+    icon: "lucide:arrow-up-from-line",
     to: AGENT_PORTAL_ESCALATION_RULE_LIST,
     isBeta: true,
   },
   {
     label: "Email accounts",
-    icon: IconAt,
+    icon: "lucide:at-sign",
     to: AGENT_PORTAL_EMAIL_LIST,
   },
   {
     label: "Ticket types",
-    icon: IconTicketType,
+    icon: "lucide:folder-open",
     to: AGENT_PORTAL_TICKET_TYPE_LIST,
   },
   {
     label: "Canned responses",
-    icon: IconCannedResponse,
+    icon: "lucide:cloud-lightning",
     to: AGENT_PORTAL_CANNED_RESPONSE_LIST,
     isBeta: true,
   },
   {
     label: "Customers",
-    icon: IconCustomer,
+    icon: "lucide:user-circle-2",
     to: AGENT_PORTAL_CUSTOMER_LIST,
   },
   {
     label: "Contacts",
-    icon: IconContact,
+    icon: "lucide:contact-2",
     to: AGENT_PORTAL_CONTACT_LIST,
   },
 ];

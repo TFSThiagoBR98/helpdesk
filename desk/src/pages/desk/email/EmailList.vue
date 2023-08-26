@@ -11,15 +11,12 @@
         </RouterLink>
       </template>
     </PageTitle>
-    <HelpdeskTable
-      class="grow"
+    <ListView
       :columns="columns"
       :data="accounts.list?.data || []"
+      :empty-message="emptyMessage"
+      class="mt-2.5 grow"
       row-key="name"
-      :emit-row-click="true"
-      :hide-checkbox="true"
-      :hide-column-selector="true"
-      @row-click="gotoAccount"
     >
       <template #email_id="{ data }">
         <div class="flex justify-between">
@@ -43,51 +40,50 @@
         </div>
       </template>
       <template #enable_incoming="{ data }">
-        <Input type="checkbox" :disabled="true" :value="data.enable_incoming" />
+        <FormControl type="checkbox" :model-value="data.enable_incoming" />
       </template>
       <template #enable_outgoing="{ data }">
-        <Input type="checkbox" :disabled="true" :value="data.enable_outgoing" />
+        <FormControl type="checkbox" :model-value="data.enable_outgoing" />
       </template>
-    </HelpdeskTable>
-    <ListNavigation class="p-3" v-bind="accounts" />
+    </ListView>
+    <ListNavigation :resource="accounts" />
   </div>
 </template>
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { Badge, Input } from "frappe-ui";
+import { usePageMeta, Badge, FormControl } from "frappe-ui";
 import { AGENT_PORTAL_EMAIL_NEW, AGENT_PORTAL_EMAIL_SINGLE } from "@/router";
 import { createListManager } from "@/composables/listManager";
 import PageTitle from "@/components/PageTitle.vue";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
+import { ListView } from "@/components";
 import ListNavigation from "@/components/ListNavigation.vue";
 import IconPlus from "~icons/lucide/plus";
 
-const router = useRouter();
+const emptyMessage = "No Email Accounts Found";
 const columns = [
   {
-    title: "Name",
-    colKey: "name",
-    colClass: "w-1/4",
+    label: "Name",
+    key: "name",
+    width: "w-64",
   },
   {
-    title: "Email",
-    colKey: "email_id",
-    colClass: "grow",
+    label: "Email",
+    key: "email_id",
+    width: "w-96",
   },
   {
-    title: "Service",
-    colKey: "service",
-    colClass: "w-32",
+    label: "Service",
+    key: "service",
+    width: "w-32",
   },
   {
-    title: "Incoming",
-    colKey: "enable_incoming",
-    colClass: "w-20",
+    label: "Incoming",
+    key: "enable_incoming",
+    width: "w-20",
   },
   {
-    title: "Outgoing",
-    colKey: "enable_outgoing",
-    colClass: "w-20",
+    label: "Outgoing",
+    key: "enable_outgoing",
+    width: "w-20",
   },
 ];
 
@@ -103,14 +99,22 @@ const accounts = createListManager({
     "default_outgoing",
   ],
   auto: true,
+  transform: (data) => {
+    for (const d of data) {
+      d.onClick = {
+        name: AGENT_PORTAL_EMAIL_SINGLE,
+        params: {
+          emailAccountId: d.name,
+        },
+      };
+    }
+    return data;
+  },
 });
 
-function gotoAccount(id: string) {
-  router.push({
-    name: AGENT_PORTAL_EMAIL_SINGLE,
-    params: {
-      emailAccountId: id,
-    },
-  });
-}
+usePageMeta(() => {
+  return {
+    title: "Email accounts",
+  };
+});
 </script>

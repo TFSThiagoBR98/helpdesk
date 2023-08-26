@@ -1,67 +1,83 @@
 <template>
-  <HelpdeskTable
-    v-model:selection="selection"
-    row-key="name"
+  <ListView
+    id="ticket"
     :columns="columns"
-    :data="tickets.list.data"
+    :data="tickets"
+    doctype="HD Ticket"
     :empty-message="emptyMessage"
+    row-key="name"
+    checkbox
+    filter
   >
-    <template #subject="{ data }">
-      <TicketSummary
-        class="col-subject"
-        :name="data.name"
-        :subject="data.subject"
-        :communications="data.count_communication"
-        :comments="data.count_comment"
-        :seen="data._seen"
+    <template #status="{ data }">
+      <Badge
+        :label="data.status"
+        :theme="ticketStatusStore.colorMapAgent[data.status]"
+        variant="subtle"
       />
     </template>
-    <template #status="{ data }">
-      <Dropdown :options="statusDropdownOptions(data.name, data.status)">
-        <template #default="{ open }">
-          <div class="flex cursor-pointer select-none items-center gap-1">
-            <div class="line-clamp-1">
-              {{ data.status }}
-            </div>
-            <IconCaretDown v-if="!open" class="h-3 w-3" />
-            <IconCaretUp v-if="open" class="h-3 w-3" />
-          </div>
-        </template>
-      </Dropdown>
+    <template #_assign="{ data }">
+      <AssignedInfo :assign="data._assign" />
     </template>
-    <template #priority="{ data }">
-      <Dropdown :options="priorityDropdownOptions(data.name, data.priority)">
-        <template #default="{ open }">
-          <div class="flex cursor-pointer select-none items-center gap-1">
-            <div class="line-clamp-1">
-              {{ data.priority }}
-            </div>
-            <IconCaretDown v-if="!open" class="h-3 w-3" />
-            <IconCaretUp v-if="open" class="h-3 w-3" />
-          </div>
-        </template>
-      </Dropdown>
+    <template #agreement_status="{ data }">
+      <Badge
+        :label="data.agreement_status"
+        :theme="slaStatusColorMap[data.agreement_status]"
+        variant="outline"
+      />
+    </template>
+    <template #response_by="{ data }">
+      <span v-if="data.response_by">
+        <Badge
+          v-if="
+            data.first_responded_on &&
+            dayjs(data.first_responded_on).isBefore(data.response_by)
+          "
+          label="Fulfilled"
+          theme="green"
+          variant="outline"
+        />
+        <Badge
+          v-else-if="dayjs(data.first_responded_on).isAfter(data.response_by)"
+          label="Failed"
+          theme="red"
+          variant="outline"
+        />
+        <Tooltip v-else :text="dayjs(data.response_by).long()">
+          {{ dayjs(data.response_by).fromNow() }}
+        </Tooltip>
+      </span>
     </template>
     <template #resolution_by="{ data }">
-      <div
-        :class="{
-          'text-red-700': Date.parse(data.resolution_by) < Date.now(),
-        }"
-      >
-        {{ data.resolution_by ? dayjs(data.resolution_by).fromNow() : "—" }}
-      </div>
+      <span v-if="data.resolution_by">
+        <Badge
+          v-if="
+            data.resolution_date &&
+            dayjs(data.resolution_date).isBefore(data.resolution_by)
+          "
+          label="Fulfilled"
+          theme="green"
+          variant="outline"
+        />
+        <Badge
+          v-else-if="dayjs(data.resolution_date).isAfter(data.resolution_by)"
+          label="Failed"
+          theme="red"
+          variant="outline"
+        />
+        <Tooltip v-else :text="dayjs(data.resolution_by).long()">
+          {{ dayjs(data.resolution_by).fromNow() }}
+        </Tooltip>
+      </span>
     </template>
     <template #creation="{ data }">
-      {{ dayjs(data.creation).format(dateFormat) }}
+      {{ dayjs(data.creation).fromNow() }}
     </template>
     <template #modified="{ data }">
-      {{ dayjs(data.modified).format(dateFormat) }}
+      {{ dayjs(data.modified).fromNow() }}
     </template>
     <template #via_customer_portal="{ data }">
       {{ data.via_customer_portal ? "Customer Portal" : "Email" }}
-    </template>
-    <template #row-extra="{ data }">
-      <AssignedInfo :assign="data._assign" />
     </template>
     <template #actions="{ selection: s }">
       <Dropdown :options="assignOpts(s as Set<number>)">
@@ -73,100 +89,45 @@
             variant="ghost"
           >
             <template #prefix>
-              <IconPlusCircle class="h-4 w-4" />
+              <Icon icon="lucide:user" class="h-4 w-4" />
             </template>
           </Button>
         </template>
       </Dropdown>
     </template>
-  </HelpdeskTable>
+  </ListView>
 </template>
 
 <script setup lang="ts">
-import { createResource, Dropdown } from "frappe-ui";
-import dayjs from "dayjs";
+import { createResource, Badge, Dropdown, Tooltip } from "frappe-ui";
+import { dayjs } from "@/dayjs";
+import { Icon } from "@iconify/vue";
 import { useAgentStore } from "@/stores/agent";
 import { useTicketStatusStore } from "@/stores/ticketStatus";
-import { useTicketPriorityStore } from "@/stores/ticketPriority";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
-import { createToast } from "@/utils/toasts";
-import { useTicketListStore } from "./data";
+import { createToast } from "@/utils";
+import { useError } from "@/composables/error";
+import { ListView } from "@/components";
 import AssignedInfo from "./AssignedInfo.vue";
-import TicketSummary from "./TicketSummary.vue";
-import IconCaretDown from "~icons/lucide/chevron-down";
-import IconCaretUp from "~icons/lucide/chevron-up";
-import IconPlusCircle from "~icons/lucide/plus-circle";
 
+interface P {
+  tickets?: any[];
+  columns: any[];
+}
+
+withDefaults(defineProps<P>(), {
+  tickets: () => [],
+});
 const agentStore = useAgentStore();
-const ticketPriorityStore = useTicketPriorityStore();
 const ticketStatusStore = useTicketStatusStore();
-const { selection, tickets } = useTicketListStore();
-
 const emptyMessage =
   "🎉 Great news! There are currently no tickets to display. Keep up the good work!";
-const dateFormat = "D/M/YYYY h:mm A";
-const columns = [
-  {
-    title: "Subject",
-    isTogglable: false,
-    colKey: "subject",
-    colClass: "col-subject",
-  },
-  {
-    title: "Status",
-    isTogglable: false,
-    colKey: "status",
-    colClass: "w-24",
-  },
-  {
-    title: "Priority",
-    isTogglable: false,
-    colKey: "priority",
-    colClass: "w-24",
-  },
-  {
-    title: "Type",
-    isTogglable: false,
-    colKey: "ticket_type",
-    colClass: "w-20",
-  },
-  {
-    title: "Contact",
-    isTogglable: false,
-    colKey: "contact",
-    colClass: "w-40",
-  },
-  {
-    title: "Due in",
-    isTogglable: false,
-    colKey: "resolution_by",
-    colClass: "w-24",
-  },
-  {
-    title: "Customer",
-    isTogglable: true,
-    colKey: "customer",
-    colClass: "w-40",
-  },
-  {
-    title: "Created on",
-    isTogglable: true,
-    colKey: "creation",
-    colClass: "w-36",
-  },
-  {
-    title: "Last modified",
-    isTogglable: true,
-    colKey: "modified",
-    colClass: "w-36",
-  },
-  {
-    title: "Source",
-    isTogglable: true,
-    colKey: "via_customer_portal",
-    colClass: "w-20",
-  },
-];
+const slaStatusColorMap = {
+  Fulfilled: "green",
+  Failed: "red",
+  "Resolution Due": "orange",
+  "First Response Due": "orange",
+  Paused: "blue",
+};
 
 const bulkAssignTicketToAgent = createResource({
   url: "helpdesk.api.ticket.bulk_assign_ticket_to_agent",
@@ -177,13 +138,7 @@ const bulkAssignTicketToAgent = createResource({
       iconClasses: "text-green-500",
     });
   },
-  onError: () => {
-    createToast({
-      title: "Unable to assign tickets to agent.",
-      icon: "x",
-      iconClasses: "text-red-500",
-    });
-  },
+  onError: useError({ title: "Unable to assign tickets to agent" }),
 });
 
 function assignOpts(selected: Set<number>) {
@@ -196,36 +151,4 @@ function assignOpts(selected: Set<number>) {
       }),
   }));
 }
-
-function statusDropdownOptions(ticketId: number, currentStatus: string) {
-  return ticketStatusStore.options
-    .filter((o) => o !== currentStatus)
-    .map((o) => ({
-      label: o,
-      onClick: () =>
-        tickets.setValue.submit({
-          name: ticketId,
-          status: o,
-        }),
-    }));
-}
-
-function priorityDropdownOptions(ticketId: number, currentPriority: string) {
-  return ticketPriorityStore.names
-    .filter((o) => o !== currentPriority)
-    .map((o) => ({
-      label: o,
-      onClick: () =>
-        tickets.setValue.submit({
-          name: ticketId,
-          priority: o,
-        }),
-    }));
-}
 </script>
-
-<style scoped>
-:deep(.col-subject) {
-  width: 480px;
-}
-</style>

@@ -9,7 +9,9 @@
   "track_service_level_agreement",
   "allow_resetting_service_level_agreement",
   "column_break_4",
-  "helpdesk_name",
+  "priority_section",
+  "default_priority",
+  "column_break_nvbf",
   "ticket_type_section",
   "default_ticket_type",
   "is_ticket_type_mandatory",
@@ -22,6 +24,7 @@
   "base_support_rotation",
   "knowledge_base_section",
   "suggest_articles_in_new_ticket_page",
+  "prefer_knowledge_base",
   "workflow_tab",
   "skip_email_workflow",
   "instantly_send_email",
@@ -29,7 +32,6 @@
   "branding_tab",
   "images_column",
   "brand_logo",
-  "brand_favicon",
   "column_break_fsjn",
   "misc_tab",
   "toasts_column",
@@ -58,11 +60,6 @@
    "fieldname": "allow_resetting_service_level_agreement",
    "fieldtype": "Check",
    "label": "Allow Resetting SLA"
-  },
-  {
-   "fieldname": "helpdesk_name",
-   "fieldtype": "Data",
-   "label": "Helpdesk Name"
   },
   {
    "fieldname": "column_break_4",
@@ -157,7 +154,7 @@
   {
    "fieldname": "ticket_type_section",
    "fieldtype": "Section Break",
-   "label": "HD Ticket Type"
+   "label": "Ticket Type"
   },
   {
    "fieldname": "default_ticket_type",
@@ -219,15 +216,30 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "Image to be used as website ",
-   "fieldname": "brand_favicon",
-   "fieldtype": "Attach Image",
-   "label": "Favicon"
+   "default": "0",
+   "fieldname": "prefer_knowledge_base",
+   "fieldtype": "Check",
+   "label": "Prefer knowledge base"
+  },
+  {
+   "fieldname": "priority_section",
+   "fieldtype": "Section Break",
+   "label": "Priority"
+  },
+  {
+   "fieldname": "default_priority",
+   "fieldtype": "Link",
+   "label": "Default priority",
+   "options": "HD Ticket Priority"
+  },
+  {
+   "fieldname": "column_break_nvbf",
+   "fieldtype": "Column Break"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2023-05-14 00:34:20.077662",
+ "modified": "2023-08-23 17:59:49.761375",
  "modified_by": "Administrator",
  "module": "Helpdesk",
  "name": "HD Settings",

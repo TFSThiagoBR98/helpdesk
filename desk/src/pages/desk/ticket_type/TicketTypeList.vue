@@ -11,42 +11,39 @@
         </RouterLink>
       </template>
     </PageTitle>
-    <HelpdeskTable
-      class="grow"
+    <ListView
       :columns="columns"
       :data="ticketTypes.list?.data || []"
+      :empty-message="emptyMessage"
+      class="mt-2.5 grow"
       row-key="name"
-      :emit-row-click="true"
-      :hide-checkbox="true"
-      :hide-column-selector="true"
-      @row-click="gotoTeam"
     />
-    <ListNavigation class="p-3" v-bind="ticketTypes" />
+    <ListNavigation :resource="ticketTypes" />
   </div>
 </template>
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { usePageMeta } from "frappe-ui";
 import {
   AGENT_PORTAL_TICKET_TYPE_NEW,
   AGENT_PORTAL_TICKET_TYPE_SINGLE,
 } from "@/router";
 import { createListManager } from "@/composables/listManager";
 import PageTitle from "@/components/PageTitle.vue";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
+import { ListView } from "@/components";
 import ListNavigation from "@/components/ListNavigation.vue";
 import IconPlus from "~icons/lucide/plus";
 
-const router = useRouter();
+const emptyMessage = "No Ticket Types Found";
 const columns = [
   {
-    title: "Name",
-    colKey: "name",
-    colClass: "grow",
+    label: "Name",
+    key: "name",
+    width: "w-80",
   },
   {
-    title: "Priority",
-    colKey: "priority",
-    colClass: "w-1/3",
+    label: "Priority",
+    key: "priority",
+    width: "w-80",
   },
 ];
 
@@ -54,14 +51,22 @@ const ticketTypes = createListManager({
   doctype: "HD Ticket Type",
   fields: ["name", "priority"],
   auto: true,
+  transform: (data) => {
+    for (const d of data) {
+      d.onClick = {
+        name: AGENT_PORTAL_TICKET_TYPE_SINGLE,
+        params: {
+          id: d.name,
+        },
+      };
+    }
+    return data;
+  },
 });
 
-function gotoTeam(id: string) {
-  router.push({
-    name: AGENT_PORTAL_TICKET_TYPE_SINGLE,
-    params: {
-      id,
-    },
-  });
-}
+usePageMeta(() => {
+  return {
+    title: "Ticket types",
+  };
+});
 </script>

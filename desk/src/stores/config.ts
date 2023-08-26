@@ -1,53 +1,33 @@
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ComputedRef } from "vue";
 import { defineStore } from "pinia";
 import { createResource } from "frappe-ui";
-import { useFavicon } from "@vueuse/core";
-import { useTitle } from "@vueuse/core";
 import { socket } from "@/socket";
 
-const URI_CONFIG = "helpdesk.api.config.get_config";
-const DEFAULT_TITLE = "Helpdesk";
-
 export const useConfigStore = defineStore("config", () => {
-	const configRes = createResource({
-		url: URI_CONFIG,
-		auto: true,
-	});
+  const configRes = createResource({
+    url: "helpdesk.api.config.get_config",
+    auto: true,
+  });
 
-	const config = computed(() => configRes.data || {});
-	const brandLogo = computed(() => config.value.brand_logo);
-	const brandFavicon = computed(() => config.value.brand_favicon);
-	const helpdeskName: ComputedRef<string> = computed(
-		() => config.value.helpdesk_name || DEFAULT_TITLE
-	);
-	const isSetupComplete: ComputedRef<boolean> = computed(
-		() => config.value.is_setup_complete
-	);
-	const skipEmailWorkflow: ComputedRef<string> = computed(
-		() => config.value.skip_email_workflow
-	);
-	const pageTitle = ref(null);
-	const windowTitle = computed(() =>
-		pageTitle.value
-			? `${pageTitle.value} • ${helpdeskName.value}`
-			: helpdeskName.value
-	);
+  const config = computed(() => configRes.data || {});
+  const brandLogo = computed(() => config.value.brand_logo);
+  const isSetupComplete: ComputedRef<boolean> = computed(
+    () => !!parseInt(config.value.setup_complete)
+  );
+  const skipEmailWorkflow: ComputedRef<boolean> = computed(
+    () => !!parseInt(config.value.skip_email_workflow)
+  );
+  const preferKnowledgeBase = computed(
+    () => !!parseInt(config.value.prefer_knowledge_base)
+  );
 
-	function setTitle(title?: string) {
-		pageTitle.value = title ? title : null;
-	}
+  socket.on("helpdesk:settings-updated", () => configRes.reload());
 
-	useFavicon(brandFavicon);
-	useTitle(windowTitle);
-
-	socket.on("helpdesk:settings-updated", () => configRes.reload());
-
-	return {
-		brandLogo,
-		config,
-		helpdeskName,
-		isSetupComplete,
-		setTitle,
-		skipEmailWorkflow,
-	};
+  return {
+    brandLogo,
+    config,
+    preferKnowledgeBase,
+    isSetupComplete,
+    skipEmailWorkflow,
+  };
 });

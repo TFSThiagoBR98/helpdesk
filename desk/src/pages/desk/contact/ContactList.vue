@@ -14,15 +14,12 @@
         </Button>
       </template>
     </PageTitle>
-    <HelpdeskTable
-      class="grow"
+    <ListView
       :columns="columns"
       :data="contacts.list?.data || []"
+      :empty-message="emptyMessage"
+      class="mt-2.5 grow"
       row-key="name"
-      :emit-row-click="true"
-      :hide-checkbox="true"
-      :hide-column-selector="true"
-      @row-click="openContact"
     >
       <template #name="{ data }">
         <div class="flex items-center gap-2">
@@ -30,8 +27,8 @@
           <div class="line-clamp-1">{{ data.name }}</div>
         </div>
       </template>
-    </HelpdeskTable>
-    <ListNavigation class="p-3" v-bind="contacts" />
+    </ListView>
+    <ListNavigation :resource="contacts" />
     <NewContactDialog
       v-model="isDialogVisible"
       @contact-created="isDialogVisible = false"
@@ -43,11 +40,11 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { Avatar } from "frappe-ui";
+import { usePageMeta, Avatar } from "frappe-ui";
 import { createListManager } from "@/composables/listManager";
 import NewContactDialog from "@/components/desk/global/NewContactDialog.vue";
 import PageTitle from "@/components/PageTitle.vue";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
+import { ListView } from "@/components";
 import ListNavigation from "@/components/ListNavigation.vue";
 import ContactDialog from "./ContactDialog.vue";
 import IconPlus from "~icons/lucide/plus";
@@ -55,20 +52,22 @@ import IconPlus from "~icons/lucide/plus";
 const isDialogVisible = ref(false);
 const isContactDialogVisible = ref(false);
 const selectedContact = ref(null);
+const emptyMessage = "No Contacts Found";
 const columns = [
   {
-    title: "Name",
-    colKey: "name",
-    colClass: "w-1/3",
+    label: "Name",
+    key: "name",
+    width: "w-80",
   },
   {
-    title: "Email",
-    colKey: "email_id",
-    colClass: "w-1/3",
+    label: "Email",
+    key: "email_id",
+    width: "w-80",
   },
   {
-    title: "Phone",
-    colKey: "phone",
+    label: "Phone",
+    key: "phone",
+    width: "w-80",
   },
 ];
 
@@ -76,6 +75,18 @@ const contacts = createListManager({
   doctype: "Contact",
   fields: ["name", "email_id", "image", "phone"],
   auto: true,
+  transform: (data) => {
+    for (const d of data) {
+      d.onClick = () => openContact(d.name);
+    }
+    return data;
+  },
+});
+
+usePageMeta(() => {
+  return {
+    title: "Contacts",
+  };
 });
 
 function openContact(id: string) {

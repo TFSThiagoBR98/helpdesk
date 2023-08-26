@@ -14,15 +14,12 @@
         </Button>
       </template>
     </PageTitle>
-    <HelpdeskTable
-      class="grow"
+    <ListView
       :columns="columns"
       :data="customers.list?.data || []"
+      :empty-message="emptyMessage"
+      class="mt-2.5 grow"
       row-key="name"
-      :emit-row-click="true"
-      :hide-checkbox="true"
-      :hide-column-selector="true"
-      @row-click="openCustomer"
     >
       <template #name="{ data }">
         <div class="flex items-center gap-2">
@@ -30,8 +27,8 @@
           <div class="line-clamp-1">{{ data.name }}</div>
         </div>
       </template>
-    </HelpdeskTable>
-    <ListNavigation class="p-3" v-bind="customers" />
+    </ListView>
+    <ListNavigation :resource="customers" />
     <NewCustomerDialog
       v-model="isDialogVisible"
       @close="isDialogVisible = false"
@@ -46,11 +43,11 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { Avatar } from "frappe-ui";
+import { usePageMeta, Avatar } from "frappe-ui";
 import { createListManager } from "@/composables/listManager";
 import NewCustomerDialog from "@/components/desk/global/NewCustomerDialog.vue";
 import PageTitle from "@/components/PageTitle.vue";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
+import { ListView } from "@/components";
 import ListNavigation from "@/components/ListNavigation.vue";
 import CustomerDialog from "./CustomerDialog.vue";
 import IconPlus from "~icons/lucide/plus";
@@ -58,27 +55,36 @@ import IconPlus from "~icons/lucide/plus";
 const isDialogVisible = ref(false);
 const isCustomerDialogVisible = ref(false);
 const selectedCustomer = ref(null);
+const emptyMessage = "No Customers Found";
 const columns = [
   {
-    title: "Name",
-    colKey: "name",
-    colClass: "w-1/3",
+    label: "Name",
+    key: "name",
+    width: "w-80",
   },
   {
-    title: "Domain",
-    colKey: "domain",
-    colClass: "w-1/3",
-  },
-  {
-    title: "Tickets",
-    colKey: "ticket_count",
+    label: "Domain",
+    key: "domain",
+    width: "w-80",
   },
 ];
 
 const customers = createListManager({
   doctype: "HD Customer",
-  fields: ["name", "image", "domain", "ticket_count"],
+  fields: ["name", "image", "domain"],
   auto: true,
+  transform: (data) => {
+    for (const d of data) {
+      d.onClick = () => openCustomer(d.name);
+    }
+    return data;
+  },
+});
+
+usePageMeta(() => {
+  return {
+    title: "Customers",
+  };
 });
 
 function openCustomer(id: string) {

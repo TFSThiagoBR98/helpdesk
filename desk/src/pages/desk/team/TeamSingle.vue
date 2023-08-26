@@ -1,7 +1,22 @@
 <template>
   <span>
     <div class="flex flex-col">
-      <TopBar :title="teamId" :back-to="{ name: AGENT_PORTAL_TEAM_LIST }">
+      <PageTitle class="border-b">
+        <template #title>
+          <BreadCrumbs
+            :items="[
+              {
+                label: 'Teams',
+                route: {
+                  name: AGENT_PORTAL_TEAM_LIST,
+                },
+              },
+              {
+                label: teamId,
+              },
+            ]"
+          />
+        </template>
         <template #right>
           <div class="flex items-center gap-2">
             <Button
@@ -23,7 +38,7 @@
             </Dropdown>
           </div>
         </template>
-      </TopBar>
+      </PageTitle>
       <div class="my-6">
         <div class="container">
           <div class="space-y-4">
@@ -43,7 +58,9 @@
                 </template>
               </Button>
             </div>
-            <div v-else class="text-base text-gray-900">🙇 Such empty</div>
+            <div v-else class="text-base text-gray-900">
+              No members found in team: {{ teamId }}
+            </div>
             <Switch
               v-model="ignoreRestrictions"
               size="md"
@@ -118,8 +135,9 @@ import {
 } from "frappe-ui";
 import { isEmpty } from "lodash";
 import { AGENT_PORTAL_TEAM_LIST, AGENT_PORTAL_TEAM_SINGLE } from "@/router";
-import { createToast } from "@/utils/toasts";
 import { useAgentStore } from "@/stores/agent";
+import { useError } from "@/composables/error";
+import { PageTitle, BreadCrumbs } from "@/components";
 import TopBar from "@/components/TopBar.vue";
 import IconMoreHorizontal from "~icons/lucide/more-horizontal";
 import IconPlus from "~icons/lucide/plus";
@@ -142,15 +160,7 @@ const team = createDocumentResource({
   name: props.teamId,
   auto: true,
   setValue: {
-    onError(error) {
-      const msg = error.messages.join(", ");
-      createToast({
-        title: "Error updating team",
-        text: msg,
-        icon: "x",
-        iconClasses: "text-red-500",
-      });
-    },
+    onError: useError({ title: "Error updating team" }),
   },
   delete: {
     onSuccess() {
@@ -158,15 +168,7 @@ const team = createDocumentResource({
         name: AGENT_PORTAL_TEAM_LIST,
       });
     },
-    onError(error) {
-      const msg = error.messages.join(", ");
-      createToast({
-        title: "Error deleting team",
-        text: msg,
-        icon: "x",
-        iconClasses: "text-red-500",
-      });
-    },
+    onError: useError({ title: "Error deleting team" }),
   },
 });
 const title = computed({
@@ -238,15 +240,7 @@ function renameTeam() {
         },
       });
     },
-    onError(error) {
-      const msg = error.message ? error.message : error.messages.join(", ");
-      createToast({
-        title: "Error renaming team",
-        text: msg,
-        icon: "x",
-        iconClasses: "text-red-500",
-      });
-    },
+    onError: useError({ title: "Error renaming team" }),
   });
 
   r.submit();

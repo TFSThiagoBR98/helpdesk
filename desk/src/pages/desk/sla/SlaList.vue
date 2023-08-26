@@ -11,15 +11,12 @@
         </RouterLink>
       </template>
     </PageTitle>
-    <HelpdeskTable
-      class="grow"
+    <ListView
       :columns="columns"
       :data="policies.list?.data || []"
+      :empty-message="emptyMessage"
+      class="mt-2.5 grow"
       row-key="name"
-      :emit-row-click="true"
-      :hide-checkbox="true"
-      :hide-column-selector="true"
-      @row-click="gotoPolicy"
     >
       <template #enabled="{ data }">
         <Badge :theme="data.enabled ? 'green' : 'gray'" variant="subtle">
@@ -31,36 +28,35 @@
           >Default</Badge
         >
       </template>
-    </HelpdeskTable>
-    <ListNavigation class="p-3" v-bind="policies" />
+    </ListView>
+    <ListNavigation :resource="policies" />
   </div>
 </template>
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-import { Badge } from "frappe-ui";
+import { usePageMeta, Badge } from "frappe-ui";
 import { AGENT_PORTAL_SLA_NEW, AGENT_PORTAL_SLA_SINGLE } from "@/router";
 import { createListManager } from "@/composables/listManager";
 import PageTitle from "@/components/PageTitle.vue";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
+import { ListView } from "@/components";
 import ListNavigation from "@/components/ListNavigation.vue";
 import IconPlus from "~icons/lucide/plus";
 
-const router = useRouter();
+const emptyMessage = "No Support Policies Found";
 const columns = [
   {
-    title: "Name",
-    colKey: "name",
-    colClass: "w-1/3",
+    label: "Name",
+    key: "name",
+    width: "w-80",
   },
   {
-    title: "Status",
-    colKey: "enabled",
-    colClass: "w-1/3",
+    label: "Status",
+    key: "enabled",
+    width: "w-80",
   },
   {
-    title: "",
-    colKey: "default_sla",
-    colClass: "w-1/3",
+    label: "",
+    key: "default_sla",
+    width: "w-80",
   },
 ];
 
@@ -68,14 +64,22 @@ const policies = createListManager({
   doctype: "HD Service Level Agreement",
   fields: ["name", "default_sla", "enabled"],
   auto: true,
+  transform: (data) => {
+    for (const d of data) {
+      d.onClick = {
+        name: AGENT_PORTAL_SLA_SINGLE,
+        params: {
+          id: d.name,
+        },
+      };
+    }
+    return data;
+  },
 });
 
-function gotoPolicy(id: string) {
-  router.push({
-    name: AGENT_PORTAL_SLA_SINGLE,
-    params: {
-      id,
-    },
-  });
-}
+usePageMeta(() => {
+  return {
+    title: "Support policies",
+  };
+});
 </script>

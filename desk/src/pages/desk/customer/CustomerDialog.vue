@@ -15,13 +15,17 @@
           <FileUploader @success="(file) => updateImage(file)">
             <template #default="{ uploading, openFileSelector }">
               <Button
-                label="Change photo"
+                :label="customer.doc?.image ? 'Change photo' : 'Upload photo'"
                 :loading="uploading"
                 @click="openFileSelector"
               />
             </template>
           </FileUploader>
-          <Button label="Remove photo" @click="updateImage(null)" />
+          <Button
+            v-if="customer.doc?.image"
+            label="Remove photo"
+            @click="updateImage(null)"
+          />
         </div>
         <form class="w-full" @submit.prevent="update">
           <Input v-model="domain" label="Domain" placeholder="example.com" />
@@ -39,7 +43,8 @@ import {
   Dialog,
   FileUploader,
 } from "frappe-ui";
-import { createToast } from "@/utils/toasts";
+import { createToast } from "@/utils";
+import { useError } from "@/composables/error";
 
 const props = defineProps({
   name: {
@@ -69,14 +74,7 @@ const customer = createDocumentResource({
         iconClasses: "text-green-500",
       });
     },
-    onError(error) {
-      createToast({
-        title: "Error updating customer",
-        text: error.messages.join(", "),
-        icon: "x",
-        iconClasses: "text-red-500",
-      });
-    },
+    onError: useError({ title: "Error updating customer" }),
   },
 });
 

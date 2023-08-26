@@ -15,13 +15,17 @@
           <FileUploader @success="(file) => updateImage(file)">
             <template #default="{ uploading, openFileSelector }">
               <Button
-                label="Change photo"
+                :label="contact.doc?.image ? 'Change photo' : 'Upload photo'"
                 :loading="uploading"
                 @click="openFileSelector"
               />
             </template>
           </FileUploader>
-          <Button label="Remove photo" @click="updateImage(null)" />
+          <Button
+            v-if="contact.doc?.image"
+            label="Remove photo"
+            @click="updateImage(null)"
+          />
         </div>
         <div class="w-full space-y-2 text-sm text-gray-700">
           <div class="space-y-1">
@@ -55,7 +59,8 @@ import {
   FileUploader,
 } from "frappe-ui";
 import zod from "zod";
-import { createToast } from "@/utils/toasts";
+import { createToast } from "@/utils";
+import { useError } from "@/composables/error";
 import MultiSelect from "@/components/MultiSelect.vue";
 
 const props = defineProps({
@@ -107,14 +112,7 @@ const contact = createDocumentResource({
         iconClasses: "text-green-500",
       });
     },
-    onError(error) {
-      createToast({
-        title: "Error updating contact",
-        text: error.messages.join(", "),
-        icon: "x",
-        iconClasses: "text-red-500",
-      });
-    },
+    onError: useError({ title: "Error updating contact" }),
   },
 });
 

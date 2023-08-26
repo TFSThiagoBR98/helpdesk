@@ -14,17 +14,14 @@
         </Button>
       </template>
     </PageTitle>
-    <HelpdeskTable
-      class="grow"
+    <ListView
       :columns="columns"
       :data="teams.list?.data || []"
+      :empty-message="emptyMessage"
+      class="mt-2.5 grow"
       row-key="name"
-      :emit-row-click="true"
-      :hide-checkbox="true"
-      :hide-column-selector="true"
-      @row-click="gotoTeam"
     />
-    <ListNavigation class="p-3" v-bind="teams" />
+    <ListNavigation :resource="teams" />
     <Dialog
       v-model="showNewDialog"
       :options="{
@@ -54,29 +51,30 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { createResource, Dialog, FormControl } from "frappe-ui";
+import { createResource, usePageMeta, Dialog, FormControl } from "frappe-ui";
 import { isEmpty } from "lodash";
 import { AGENT_PORTAL_TEAM_SINGLE } from "@/router";
-import { createToast } from "@/utils/toasts";
 import { createListManager } from "@/composables/listManager";
+import { useError } from "@/composables/error";
 import PageTitle from "@/components/PageTitle.vue";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
+import { ListView } from "@/components";
 import ListNavigation from "@/components/ListNavigation.vue";
 import IconPlus from "~icons/lucide/plus";
 
 const router = useRouter();
 const showNewDialog = ref(false);
 const newTeamTitle = ref(null);
+const emptyMessage = "No Teams Found";
 const columns = [
   {
-    title: "Name",
-    colKey: "name",
-    colClass: "w-1/3",
+    label: "Name",
+    key: "name",
+    width: "w-80",
   },
   {
-    title: "Assignment rule",
-    colKey: "assignment_rule",
-    colClass: "w-1/3",
+    label: "Assignment rule",
+    key: "assignment_rule",
+    width: "w-80",
   },
 ];
 
@@ -84,6 +82,17 @@ const teams = createListManager({
   doctype: "HD Team",
   fields: ["name", "assignment_rule"],
   auto: true,
+  transform: (data) => {
+    for (const d of data) {
+      d.onClick = {
+        name: AGENT_PORTAL_TEAM_SINGLE,
+        params: {
+          teamId: d.name,
+        },
+      };
+    }
+    return data;
+  },
 });
 
 const newTeam = createResource({
@@ -108,23 +117,12 @@ const newTeam = createResource({
       },
     });
   },
-  onError(error) {
-    const msg = error.message ? error.message : error.messages.join(", ");
-    createToast({
-      title: "Error creating team",
-      text: msg,
-      icon: "x",
-      iconClasses: "text-red-500",
-    });
-  },
+  onError: useError({ title: "Error creating team" }),
 });
 
-function gotoTeam(id: string) {
-  router.push({
-    name: AGENT_PORTAL_TEAM_SINGLE,
-    params: {
-      teamId: id,
-    },
-  });
-}
+usePageMeta(() => {
+  return {
+    title: "Teams",
+  };
+});
 </script>

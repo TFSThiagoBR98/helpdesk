@@ -14,17 +14,14 @@
         </Button>
       </template>
     </PageTitle>
-    <HelpdeskTable
-      class="grow"
+    <ListView
       :columns="columns"
       :data="responses.list?.data || []"
+      :empty-message="emptyMessage"
+      class="mt-2.5 grow"
       row-key="name"
-      :emit-row-click="true"
-      :hide-checkbox="true"
-      :hide-column-selector="true"
-      @row-click="gotoResponse"
     />
-    <ListNavigation class="p-3" v-bind="responses" />
+    <ListNavigation :resource="responses" />
     <AddNewCannedResponsesDialog
       :show="showNewDialog"
       @close="showNewDialog = false"
@@ -33,27 +30,27 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { usePageMeta } from "frappe-ui";
 import { AGENT_PORTAL_CANNED_RESPONSE_SINGLE } from "@/router";
 import { createListManager } from "@/composables/listManager";
 import PageTitle from "@/components/PageTitle.vue";
-import HelpdeskTable from "@/components/HelpdeskTable.vue";
+import { ListView } from "@/components";
 import ListNavigation from "@/components/ListNavigation.vue";
 import AddNewCannedResponsesDialog from "@/components/desk/global/AddNewCannedResponsesDialog.vue";
 import IconPlus from "~icons/lucide/plus";
 
-const router = useRouter();
 const showNewDialog = ref(false);
+const emptyMessage = "No Canned Responses Found";
 const columns = [
   {
-    title: "Name",
-    colKey: "name",
-    colClass: "w-1/3",
+    label: "Name",
+    key: "name",
+    width: "w-80",
   },
   {
-    title: "Owner",
-    colKey: "owner",
-    colClass: "w-1/3",
+    label: "Owner",
+    key: "owner",
+    width: "w-96",
   },
 ];
 
@@ -61,14 +58,22 @@ const responses = createListManager({
   doctype: "HD Canned Response",
   fields: ["name", "title", "owner"],
   auto: true,
+  transform: (data) => {
+    for (const d of data) {
+      d.onClick = {
+        name: AGENT_PORTAL_CANNED_RESPONSE_SINGLE,
+        params: {
+          id: d.name,
+        },
+      };
+    }
+    return data;
+  },
 });
 
-function gotoResponse(id: string) {
-  router.push({
-    name: AGENT_PORTAL_CANNED_RESPONSE_SINGLE,
-    params: {
-      id,
-    },
-  });
-}
+usePageMeta(() => {
+  return {
+    title: "Canned responses",
+  };
+});
 </script>
