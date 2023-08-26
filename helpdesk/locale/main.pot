@@ -64,6 +64,10 @@ msgctxt "HD Ticket Template"
 msgid "About"
 msgstr ""
 
+#: helpdesk/doctype/hd_article/api.py:12
+msgid "Access denied"
+msgstr ""
+
 #. DocType: HD Ticket Activity:1
 msgid "Action"
 msgstr ""
@@ -98,6 +102,7 @@ msgstr ""
 #. DocType: HD Agent:1
 #: helpdesk/doctype/hd_agent/hd_agent.json
 #: helpdesk/doctype/hd_article/hd_article.json
+#: helpdesk/doctype/hd_article_category/hd_article_category.json
 #: helpdesk/doctype/hd_canned_response/hd_canned_response.json
 #: helpdesk/doctype/hd_customer/hd_customer.json
 #: helpdesk/doctype/hd_notification/hd_notification.json
@@ -109,7 +114,9 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket/hd_ticket.json
 #: helpdesk/doctype/hd_ticket_activity/hd_ticket_activity.json
 #: helpdesk/doctype/hd_ticket_comment/hd_ticket_comment.json
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.json
 #: helpdesk/doctype/hd_ticket_priority/hd_ticket_priority.json
+#: helpdesk/doctype/hd_ticket_template/hd_ticket_template.json
 #: helpdesk/doctype/hd_ticket_type/hd_ticket_type.json
 msgid "Agent"
 msgstr ""
@@ -147,6 +154,12 @@ msgctxt "HD Ticket"
 msgid "Agent Group"
 msgstr ""
 
+#. Label of a Data field in DocType 'HD Agent'
+#: helpdesk/doctype/hd_agent/hd_agent.json
+msgctxt "HD Agent"
+msgid "Agent Name"
+msgstr ""
+
 #: helpdesk/doctype/hd_agent/hd_agent.py:98
 msgid "Agent {0} does not belong to team {1}"
 msgstr ""
@@ -154,9 +167,13 @@ msgstr ""
 #. Name of a role
 #. DocType: HD Agent:1
 #: helpdesk/doctype/hd_agent/hd_agent.json
+#: helpdesk/doctype/hd_article/hd_article.json
+#: helpdesk/doctype/hd_article_category/hd_article_category.json
 #: helpdesk/doctype/hd_article_feedback/hd_article_feedback.json
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.json
 #: helpdesk/doctype/hd_ticket/hd_ticket.json
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.json
+#: helpdesk/doctype/hd_ticket_template/hd_ticket_template.json
 #: helpdesk/doctype/hd_ticket_type/hd_ticket_type.json
 msgid "All"
 msgstr ""
@@ -404,6 +421,7 @@ msgctxt "HD Settings"
 msgid "Branding"
 msgstr ""
 
+#: helpdesk/doctype/hd_ticket/hd_ticket.py:463
 #: helpdesk/doctype/hd_ticket/hd_ticket.py:481
 msgid "Can not send email. No sender email set up!"
 msgstr ""
@@ -451,6 +469,10 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket/hd_ticket.json
 msgctxt "HD Ticket"
 msgid "Closed"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket/hd_ticket.py:237
+msgid "Closed or rated tickets cannot be updated by non-agents"
 msgstr ""
 
 #: helpdesk/doctype/hd_ticket/hd_ticket.py:717
@@ -549,6 +571,12 @@ msgctxt "HD Customer"
 msgid "Contact Count"
 msgstr ""
 
+#. Label of a HTML field in DocType 'HD Customer'
+#: helpdesk/doctype/hd_customer/hd_customer.json
+msgctxt "HD Customer"
+msgid "Contact HTML"
+msgstr ""
+
 #: templates/components/contact_with_us.html:11
 msgid "Contact with us"
 msgstr ""
@@ -569,12 +597,14 @@ msgstr ""
 
 #. Label of a Section Break field in DocType 'HD Article'
 #. Label of a Text Editor field in DocType 'HD Article'
+#. Label of a Text field in DocType 'HD Article'
 #: helpdesk/doctype/hd_article/hd_article.json
 msgctxt "HD Article"
 msgid "Content"
 msgstr ""
 
 #. Label of a Text field in DocType 'HD Ticket Comment'
+#. Label of a Text Editor field in DocType 'HD Ticket Comment'
 #: helpdesk/doctype/hd_ticket_comment/hd_ticket_comment.json
 msgctxt "HD Ticket Comment"
 msgid "Content"
@@ -624,6 +654,10 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket_custom_field_item/hd_ticket_custom_field_item.json
 msgctxt "HD Ticket Custom Field Item"
 msgid "Custom Field"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket_template/hd_ticket_template.py:24
+msgid "Custom Field `{0}` does not exist in Ticket"
 msgstr ""
 
 #. DocType: HD Ticket:1
@@ -763,6 +797,16 @@ msgstr ""
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.json
 msgctxt "HD Service Level Agreement"
 msgid "Default SLA"
+msgstr ""
+
+#. Label of a Link field in DocType 'HD Settings'
+#: helpdesk/doctype/hd_settings/hd_settings.json
+msgctxt "HD Settings"
+msgid "Default priority"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket_template/hd_ticket_template.py:31
+msgid "Default template can not be deleted"
 msgstr ""
 
 #. DocType: HD Settings:1
@@ -965,6 +1009,12 @@ msgstr ""
 msgid "Escalation rule already exists for this criteria"
 msgstr ""
 
+#. Option for a Select field in DocType 'HD Ticket'
+#: helpdesk/doctype/hd_ticket/hd_ticket.json
+msgctxt "HD Ticket"
+msgid "Failed"
+msgstr ""
+
 #. DocType: HD Settings:1
 msgid "Favicon"
 msgstr ""
@@ -991,6 +1041,18 @@ msgctxt "HD Ticket"
 msgid "Feedback"
 msgstr ""
 
+#. Label of a Long Text field in DocType 'HD Ticket'
+#: helpdesk/doctype/hd_ticket/hd_ticket.json
+msgctxt "HD Ticket"
+msgid "Feedback (Extra)"
+msgstr ""
+
+#. Label of a Link field in DocType 'HD Ticket'
+#: helpdesk/doctype/hd_ticket/hd_ticket.json
+msgctxt "HD Ticket"
+msgid "Feedback (Option)"
+msgstr ""
+
 #. DocType: HD Ticket:1
 msgid "Feedback Status"
 msgstr ""
@@ -1011,6 +1073,12 @@ msgctxt "HD Ticket"
 msgid "Feedback Submitted"
 msgstr ""
 
+#. Label of a Data field in DocType 'HD Ticket Template Field'
+#: helpdesk/doctype/hd_ticket_template_field/hd_ticket_template_field.json
+msgctxt "HD Ticket Template Field"
+msgid "Field (fieldname)"
+msgstr ""
+
 #. DocType: HD Preset Filter Item:1
 msgid "Field Name"
 msgstr ""
@@ -1025,6 +1093,12 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket_custom_field/hd_ticket_custom_field.json
 msgctxt "HD Ticket Custom Field"
 msgid "Field Name"
+msgstr ""
+
+#. Label of a Table field in DocType 'HD Ticket Template'
+#: helpdesk/doctype/hd_ticket_template/hd_ticket_template.json
+msgctxt "HD Ticket Template"
+msgid "Fields"
 msgstr ""
 
 #. DocType: HD Ticket Template DocField:1
@@ -1438,6 +1512,11 @@ msgid "HD Ticket Custom Field Item"
 msgstr ""
 
 #. Name of a DocType
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.json
+msgid "HD Ticket Feedback Option"
+msgstr ""
+
+#. Name of a DocType
 #. DocType: HD Ticket Priority:1
 #: helpdesk/doctype/hd_ticket_priority/hd_ticket_priority.json
 msgid "HD Ticket Priority"
@@ -1453,6 +1532,11 @@ msgstr ""
 #. DocType: HD Ticket Template DocField:1
 #: helpdesk/doctype/hd_ticket_template_docfield/hd_ticket_template_docfield.json
 msgid "HD Ticket Template DocField"
+msgstr ""
+
+#. Name of a DocType
+#: helpdesk/doctype/hd_ticket_template_field/hd_ticket_template_field.json
+msgid "HD Ticket Template Field"
 msgstr ""
 
 #. Name of a DocType
@@ -1516,6 +1600,12 @@ msgid ""
 "holidays individually."
 msgstr ""
 
+#. Label of a Check field in DocType 'HD Ticket Template Field'
+#: helpdesk/doctype/hd_ticket_template_field/hd_ticket_template_field.json
+msgctxt "HD Ticket Template Field"
+msgid "Hide from customer"
+msgstr ""
+
 #. DocType: HD Service Level Agreement:1
 msgid "Holiday List"
 msgstr ""
@@ -1555,6 +1645,12 @@ msgstr ""
 #: helpdesk/doctype/hd_desk_account_request/hd_desk_account_request.json
 msgctxt "HD Desk Account Request"
 msgid "IP Address"
+msgstr ""
+
+#. Label of a Data field in DocType 'HD Article Category'
+#: helpdesk/doctype/hd_article_category/hd_article_category.json
+msgctxt "HD Article Category"
+msgid "Icon"
 msgstr ""
 
 #. DocType: HD Team:1
@@ -1709,6 +1805,12 @@ msgctxt "HD Settings"
 msgid "Is name setup skipped"
 msgstr ""
 
+#. Label of a Check field in DocType 'HD Ticket Comment'
+#: helpdesk/doctype/hd_ticket_comment/hd_ticket_comment.json
+msgctxt "HD Ticket Comment"
+msgid "Is pinned"
+msgstr ""
+
 #. DocType: HD Settings:1
 msgid "Is setup complete"
 msgstr ""
@@ -1742,6 +1844,12 @@ msgstr ""
 #. Label of a Data field in DocType 'HD Ticket Custom Field'
 #: helpdesk/doctype/hd_ticket_custom_field/hd_ticket_custom_field.json
 msgctxt "HD Ticket Custom Field"
+msgid "Label"
+msgstr ""
+
+#. Label of a Data field in DocType 'HD Ticket Feedback Option'
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.json
+msgctxt "HD Ticket Feedback Option"
 msgid "Label"
 msgstr ""
 
@@ -1805,6 +1913,12 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket_template_docfield/hd_ticket_template_docfield.json
 msgctxt "HD Ticket Template DocField"
 msgid "Long Text"
+msgstr ""
+
+#. Description of a Int field in DocType 'HD Ticket Priority'
+#: helpdesk/doctype/hd_ticket_priority/hd_ticket_priority.json
+msgctxt "HD Ticket Priority"
+msgid "Lower the Integer value, higher is the priority of the issue"
 msgstr ""
 
 #. DocType: HD Ticket Template DocField:1
@@ -2058,6 +2172,12 @@ msgctxt "HD Article Category"
 msgid "Parent Category"
 msgstr ""
 
+#. Option for a Select field in DocType 'HD Ticket'
+#: helpdesk/doctype/hd_ticket/hd_ticket.json
+msgctxt "HD Ticket"
+msgid "Paused"
+msgstr ""
+
 #: helpdesk/doctype/hd_service_holiday_list/hd_service_holiday_list.py:36
 msgid "Please select weekly off day"
 msgstr ""
@@ -2112,6 +2232,12 @@ msgctxt "HD Support Search Source"
 msgid "Post Title Key"
 msgstr ""
 
+#. Label of a Check field in DocType 'HD Settings'
+#: helpdesk/doctype/hd_settings/hd_settings.json
+msgctxt "HD Settings"
+msgid "Prefer knowledge base"
+msgstr ""
+
 #. DocType: HD Service Level Agreement:1
 msgid "Priorities"
 msgstr ""
@@ -2138,6 +2264,12 @@ msgctxt "HD Service Level Priority"
 msgid "Priority"
 msgstr ""
 
+#. Label of a Section Break field in DocType 'HD Settings'
+#: helpdesk/doctype/hd_settings/hd_settings.json
+msgctxt "HD Settings"
+msgid "Priority"
+msgstr ""
+
 #. Label of a Link field in DocType 'HD Ticket'
 #: helpdesk/doctype/hd_ticket/hd_ticket.json
 msgctxt "HD Ticket"
@@ -2154,6 +2286,7 @@ msgstr ""
 msgid "Priority has been changed to {0}."
 msgstr ""
 
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:61
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:72
 msgid "Priority {0} has been repeated."
 msgstr ""
@@ -2232,6 +2365,20 @@ msgctxt "HD Ticket"
 msgid "Rating"
 msgstr ""
 
+#. Label of a Rating field in DocType 'HD Ticket Feedback Option'
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.json
+msgctxt "HD Ticket Feedback Option"
+msgid "Rating"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.py:22
+msgid "Rating must be between 0.2 and 1.0"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.py:18
+msgid "Rating {0} is not allowed"
+msgstr ""
+
 #. DocType: HD Ticket:1
 msgid "Reference"
 msgstr ""
@@ -2250,6 +2397,12 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket_comment/hd_ticket_comment.json
 msgctxt "HD Ticket Comment"
 msgid "Reference Ticket"
+msgstr ""
+
+#. Label of a Tab Break field in DocType 'HD Customer'
+#: helpdesk/doctype/hd_customer/hd_customer.json
+msgctxt "HD Customer"
+msgid "References"
 msgstr ""
 
 #. DocType: HD Ticket:1
@@ -2279,6 +2432,12 @@ msgstr ""
 #: helpdesk/doctype/hd_portal_signup_request/hd_portal_signup_request.json
 msgctxt "HD Portal Signup Request"
 msgid "Request Key"
+msgstr ""
+
+#. Label of a Check field in DocType 'HD Ticket Template Field'
+#: helpdesk/doctype/hd_ticket_template_field/hd_ticket_template_field.json
+msgctxt "HD Ticket Template Field"
+msgid "Required"
 msgstr ""
 
 #. DocType: HD Ticket:1
@@ -2421,6 +2580,7 @@ msgctxt "HD Support Search Source"
 msgid "Response Result Key Path"
 msgstr ""
 
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:50
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:61
 msgid ""
 "Response Time for {0} priority in row {1} can't be greater than "
@@ -2613,6 +2773,7 @@ msgctxt "HD Ticket Template DocField"
 msgid "Select"
 msgstr ""
 
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:69
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:80
 msgid "Select a Default Priority."
 msgstr ""
@@ -2631,6 +2792,8 @@ msgctxt "HD Service Level Agreement"
 msgid "Service Level Name"
 msgstr ""
 
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:33
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:41
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:44
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:52
 msgid "Set Response Time for Priority {0} in row {1}."
@@ -2750,6 +2913,7 @@ msgctxt "HD Service Day"
 msgid "Start Time"
 msgstr ""
 
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:83
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:94
 msgid "Start Time can't be greater than or equal to End Time for {0}."
 msgstr ""
@@ -2918,6 +3082,7 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket_activity/hd_ticket_activity.json
 #: helpdesk/doctype/hd_ticket_comment/hd_ticket_comment.json
 #: helpdesk/doctype/hd_ticket_custom_field_config/hd_ticket_custom_field_config.json
+#: helpdesk/doctype/hd_ticket_feedback_option/hd_ticket_feedback_option.json
 #: helpdesk/doctype/hd_ticket_priority/hd_ticket_priority.json
 #: helpdesk/doctype/hd_ticket_template/hd_ticket_template.json
 #: helpdesk/doctype/hd_ticket_type/hd_ticket_type.json
@@ -2990,6 +3155,10 @@ msgctxt "HD Ticket Template"
 msgid "Template Route"
 msgstr ""
 
+#: helpdesk/doctype/hd_ticket_template/api.py:16
+msgid "Template not found"
+msgstr ""
+
 #. DocType: HD Service Level Agreement:1
 msgid "Territory"
 msgstr ""
@@ -3010,8 +3179,13 @@ msgctxt "HD Ticket Template DocField"
 msgid "Text Editor"
 msgstr ""
 
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:100
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:161
 msgid "The Condition '{0}' is invalid"
+msgstr ""
+
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:118
+msgid "The Default HD Service Level Agreement cannot be deleted"
 msgstr ""
 
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:150
@@ -3153,6 +3327,12 @@ msgstr ""
 msgid "Ticket Type"
 msgstr ""
 
+#. Label of a Section Break field in DocType 'HD Settings'
+#: helpdesk/doctype/hd_settings/hd_settings.json
+msgctxt "HD Settings"
+msgid "Ticket Type"
+msgstr ""
+
 #. Label of a Link field in DocType 'HD Ticket'
 #: helpdesk/doctype/hd_ticket/hd_ticket.json
 msgctxt "HD Ticket"
@@ -3163,6 +3343,14 @@ msgstr ""
 #: helpdesk/workspace/helpdesk/helpdesk.json
 msgctxt "HD Ticket Type"
 msgid "Ticket Type"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket/hd_ticket.py:227
+msgid "Ticket must be resolved with a feedback"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket/api.py:45
+msgid "Ticket not found"
 msgstr ""
 
 #. DocType: HD Escalation Rule:1
@@ -3177,6 +3365,7 @@ msgstr ""
 
 #. DocType: HD Settings:1
 #: helpdesk/doctype/hd_ticket/hd_ticket.py:205
+#: helpdesk/doctype/hd_ticket/hd_ticket.py:216
 msgid "Ticket type is mandatory"
 msgstr ""
 
@@ -3344,6 +3533,12 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket/hd_ticket.json
 msgctxt "HD Ticket"
 msgid "URI"
+msgstr ""
+
+#. Label of a Data field in DocType 'HD Ticket Template Field'
+#: helpdesk/doctype/hd_ticket_template_field/hd_ticket_template_field.json
+msgctxt "HD Ticket Template Field"
+msgid "URL/Method"
 msgstr ""
 
 #. DocType: HD Ticket Template DocField:1
@@ -3531,6 +3726,7 @@ msgctxt "HD Service Day"
 msgid "Workday"
 msgstr ""
 
+#: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:91
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:102
 msgid "Workday {0} has been repeated."
 msgstr ""
@@ -3558,6 +3754,10 @@ msgstr ""
 
 #: helpdesk/report/ticket_analytics/ticket_analytics.js:42
 msgid "Yearly"
+msgstr ""
+
+#: helpdesk/doctype/hd_ticket/hd_ticket.py:407
+msgid "You are not permitted to add a comment"
 msgstr ""
 
 #. DocType: HD Preset Filter Item:1
