@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Helpdesk VERSION\n"
 "Report-Msgid-Bugs-To: hello@frappe.io\n"
 "POT-Creation-Date: 2023-07-17 20:52+0000\n"
-"PO-Revision-Date: 2023-08-27 18:10+0000\n"
+"PO-Revision-Date: 2023-08-27 18:33+0000\n"
 "Last-Translator: Weblate Admin <admin@tfs.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <http://localhost:4755/projects/frappe/"
 "helpdesk/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgid ""
 "Helpdesk</a></span>"
 msgstr ""
 "<span class=\"h3\" style=\"\"><a href=\"/helpdesk\">Visite a Central de "
-"atendimento</a></span>"
+"Atendimento</a></span>"
 
 #. DocType: HD Support Search Source:1
 msgid "API"
@@ -1559,35 +1559,35 @@ msgstr ""
 
 #: config/desktop.py:11
 msgid "HelpDesk"
-msgstr ""
+msgstr "Central de Atendimento"
 
 #. Name of a Workspace
 #. DocType: HD Agent:1
 #: helpdesk/workspace/helpdesk/helpdesk.json
 msgid "Helpdesk"
-msgstr ""
+msgstr "Central de atendimento"
 
 #. Name of a role
 #. DocType: HD Ticket Priority:1
 #: helpdesk/doctype/hd_ticket_priority/hd_ticket_priority.json
 #: helpdesk/doctype/hd_ticket_type/hd_ticket_type.json
 msgid "Helpdesk Contact"
-msgstr ""
+msgstr "Contato da Central de Atendimento"
 
 #. DocType: HD Settings:1
 msgid "Helpdesk Name"
-msgstr ""
+msgstr "Nome da Central de Atendimento"
 
 #. Label of a Data field in DocType 'HD Settings'
 #: helpdesk/doctype/hd_settings/hd_settings.json
 msgctxt "HD Settings"
 msgid "Helpdesk Name"
-msgstr ""
+msgstr "Nome da Central de Atendimento"
 
 #. Label of a Card Break in the Helpdesk Workspace
 #: helpdesk/workspace/helpdesk/helpdesk.json
 msgid "Helpdesk Reports"
-msgstr ""
+msgstr "Relatórios da Central de Atendimento"
 
 #. DocType: HD Article:1
 msgid "Helpful"
