@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: Helpdesk VERSION\n"
 "Report-Msgid-Bugs-To: hello@frappe.io\n"
 "POT-Creation-Date: 2023-07-17 20:52+0000\n"
-"PO-Revision-Date: 2023-07-17 20:52+0000\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-08-27 18:10+0000\n"
+"Last-Translator: Weblate Admin <admin@tfs.dev.br>\n"
+"Language-Team: Portuguese (Brazil) <http://localhost:4755/projects/frappe/"
+"helpdesk/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.18.2\n"
 "Generated-By: Babel 2.12.1\n"
 
 #. Workspace Header Text
@@ -23,81 +26,83 @@ msgid ""
 "<span class=\"h3\" style=\"\"><a href=\"/helpdesk\">Visit "
 "Helpdesk</a></span>"
 msgstr ""
+"<span class=\"h3\" style=\"\"><a href=\"/helpdesk\">Visite a Central de "
+"atendimento</a></span>"
 
 #. DocType: HD Support Search Source:1
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #. Option for a Select field in DocType 'HD Support Search Source'
 #. Label of a Section Break field in DocType 'HD Support Search Source'
 #: helpdesk/doctype/hd_support_search_source/hd_support_search_source.json
 msgctxt "HD Support Search Source"
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #. DocType: HD Ticket Template DocField:1
 msgid "API Method"
-msgstr ""
+msgstr "Método da API"
 
 #. Label of a Data field in DocType 'HD Ticket Template DocField'
 #: helpdesk/doctype/hd_ticket_template_docfield/hd_ticket_template_docfield.json
 msgctxt "HD Ticket Template DocField"
 msgid "API Method"
-msgstr ""
+msgstr "Método da API"
 
 #. DocType: HD Ticket Template DocField:1
 msgid "API Response"
-msgstr ""
+msgstr "Resposta da API"
 
 #. Option for a Select field in DocType 'HD Ticket Template DocField'
 #: helpdesk/doctype/hd_ticket_template_docfield/hd_ticket_template_docfield.json
 msgctxt "HD Ticket Template DocField"
 msgid "API Response"
-msgstr ""
+msgstr "Resposta da API"
 
 #. DocType: HD Ticket Template:1
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #. Label of a Code field in DocType 'HD Ticket Template'
 #: helpdesk/doctype/hd_ticket_template/hd_ticket_template.json
 msgctxt "HD Ticket Template"
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #: helpdesk/doctype/hd_article/api.py:12
 msgid "Access denied"
-msgstr ""
+msgstr "Acesso negado"
 
 #. DocType: HD Ticket Activity:1
 msgid "Action"
-msgstr ""
+msgstr "Ação"
 
 #. Label of a Data field in DocType 'HD Ticket Activity'
 #: helpdesk/doctype/hd_ticket_activity/hd_ticket_activity.json
 msgctxt "HD Ticket Activity"
 msgid "Action"
-msgstr ""
+msgstr "Ação"
 
 #. DocType: HD Service Holiday List:1
 msgid "Add Weekly Holidays"
-msgstr ""
+msgstr "Adicionar Feriados Semanais"
 
 #. Label of a Section Break field in DocType 'HD Service Holiday List'
 #: helpdesk/doctype/hd_service_holiday_list/hd_service_holiday_list.json
 msgctxt "HD Service Holiday List"
 msgid "Add Weekly Holidays"
-msgstr ""
+msgstr "Adicionar Feriados Semanais"
 
 #. DocType: HD Service Holiday List:1
 msgid "Add to Holidays"
-msgstr ""
+msgstr "Adicionar aos feriados"
 
 #. Label of a Button field in DocType 'HD Service Holiday List'
 #: helpdesk/doctype/hd_service_holiday_list/hd_service_holiday_list.json
 msgctxt "HD Service Holiday List"
 msgid "Add to Holidays"
-msgstr ""
+msgstr "Adicionar aos feriados"
 
 #. Name of a role
 #. DocType: HD Agent:1
@@ -120,50 +125,50 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket_template/hd_ticket_template.json
 #: helpdesk/doctype/hd_ticket_type/hd_ticket_type.json
 msgid "Agent"
-msgstr ""
+msgstr "Agente"
 
 #. Label of a Link in the Helpdesk Workspace
 #: helpdesk/workspace/helpdesk/helpdesk.json
 msgctxt "HD Agent"
 msgid "Agent"
-msgstr ""
+msgstr "Agente"
 
 #. Label of a Link field in DocType 'HD Escalation Rule'
 #: helpdesk/doctype/hd_escalation_rule/hd_escalation_rule.json
 msgctxt "HD Escalation Rule"
 msgid "Agent"
-msgstr ""
+msgstr "Agente"
 
 #. Label of a Section Break field in DocType 'HD Ticket Custom Field Item'
 #: helpdesk/doctype/hd_ticket_custom_field_item/hd_ticket_custom_field_item.json
 msgctxt "HD Ticket Custom Field Item"
 msgid "Agent"
-msgstr ""
+msgstr "Agente"
 
 #. Label of a Card Break in the Helpdesk Workspace
 #: helpdesk/workspace/helpdesk/helpdesk.json
 msgid "Agent Configuration"
-msgstr ""
+msgstr "Configuração do Agente"
 
 #. DocType: HD Ticket:1
 msgid "Agent Group"
-msgstr ""
+msgstr "Grupo de agentes"
 
 #. Label of a Link field in DocType 'HD Ticket'
 #: helpdesk/doctype/hd_ticket/hd_ticket.json
 msgctxt "HD Ticket"
 msgid "Agent Group"
-msgstr ""
+msgstr "Grupo de agentes"
 
 #. Label of a Data field in DocType 'HD Agent'
 #: helpdesk/doctype/hd_agent/hd_agent.json
 msgctxt "HD Agent"
 msgid "Agent Name"
-msgstr ""
+msgstr "Nome do agente"
 
 #: helpdesk/doctype/hd_agent/hd_agent.py:98
 msgid "Agent {0} does not belong to team {1}"
-msgstr ""
+msgstr "O agente {0} não pertence à equipe {1}"
 
 #. Name of a role
 #. DocType: HD Agent:1
@@ -177,7 +182,7 @@ msgstr ""
 #: helpdesk/doctype/hd_ticket_template/hd_ticket_template.json
 #: helpdesk/doctype/hd_ticket_type/hd_ticket_type.json
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: helpdesk/doctype/hd_service_level_agreement/hd_service_level_agreement.py:668
 msgid "Allow Resetting HD Service Level Agreement from Helpdesk Settings."
